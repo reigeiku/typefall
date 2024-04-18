@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+header {
+    /* border: 1px solid red; */
+    background-color: white;
+    box-shadow: 0 10px 100px #fff;
+    z-index: 98;
+}
+
+header > h1 {
+    width: fit-content;
+    margin: 0 auto;
+    padding-top: 1rem;
+}
+
+main {
+    width: 100vh;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%);
+    height: 100%;
+    width: 100%;
+    border: 1px solid lime;
+}
+
+.base-container {
+    width: fit-content;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.player-nav {
+    background-color: #ececec;
+    border-radius: 10px;
+    height: 40px;
+    width: 20vw;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.pause-screen {
+    z-index: 99;
+    background: #888;
+    opacity: 0.5;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.pause-screen button {
+    opacity: 1;
+}
+
+.base {
+    width: 100vh;
+    border: 1px solid black;
+}
+
+.word {
+    color: #acacac;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+.typed-word {
+    color: black;
+    position: absolute;
+    left: 0;
+}
+
+.play-button {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    height: fit-content;
+    cursor: pointer;
+}
+
+input {
+    position: relative;
+    bottom: 2px;
+    left: 50%;
+    transform: translate(-50%);
+    color: #000;
+    border-radius: 20px;
+    border-top: 5px solid #000;
+    background-color: transparent;
+    height: 18px;
+    width: 357px;
+    padding: 10px;
+	outline: inherit;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+#text-display {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100px;
+    width: fit-content;
+    font-size: 2rem;
+}
+
+#caret {
+    position: absolute;
+}
+
+.blinking {
+    -webkit-animation: 1s blink step-end infinite;
+    -moz-animation: 1s blink step-end infinite;
+    -ms-animation: 1s blink step-end infinite;
+    -o-animation: 1s blink step-end infinite;
+    animation: 1s blink step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: black;
+    }
+}
+
+@-moz-keyframes blink {
+    from, to {
+        
+    }
+}
