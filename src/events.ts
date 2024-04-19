@@ -11,22 +11,13 @@ function commands(input: string) {
                 paused = false;
                 setup();
                 startButton.innerHTML = "stop";
+                healthBar.style.height = 500 + "px";
             }
             break;
         }
         case "-stop": {
             if (inPlay) {
-                inPlay = false;
-                paused = true;
-        
-                for (let i = 0; i < summonedWords.length; i++) {
-                    summonedWords[i].divElement.remove();
-                }
-                summonedWords= [];
-        
-                userInput = "";
-                timeoutID = undefined;
-                startButton.innerHTML = "play";
+                end();
             }
             break;
         }
@@ -51,6 +42,13 @@ function checkEnteredWord() {
         if (word === userInput) {
             summonedWords.splice(i, 1);
             divElement.remove();
+            const { height } = healthBar.getBoundingClientRect();
+            if (playerHealth < 100 && height < 500) {
+                playerHealth += 5;
+                healthBar.style.height = (height + 25) + "px";
+            } else if (playerHealth >= 100 && height <= 500) {
+                healthBar.style.height = 500 + "px";
+            }
         }
     }
 
@@ -69,19 +67,12 @@ window.addEventListener("blur", () => {
 startButton.addEventListener("click", () => {
     if (!inPlay) {
         inPlay = true;
+        paused = false;
         setup();
         startButton.innerHTML = "stop";
+        healthBar.style.height = 500 + "px";
     } else {
-        inPlay = true;
-
-        for (let i = 0; i < summonedWords.length; i++) {
-            summonedWords[i].divElement.remove();
-        }
-        summonedWords= [];
-
-        userInput = "";
-        timeoutID = undefined;
-        startButton.innerHTML = "play";
+        end();
     }
 });
 
@@ -98,6 +89,7 @@ document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (input.length <= 1 && alphanumericRegex.test(input)) {
         userInput += input;
         caretDisplay.classList.remove("blinking");
+        // typeUserInput(input);
     }
 
     if (userInput === "" && !paused) {

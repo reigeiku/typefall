@@ -8,6 +8,11 @@ let inPlay = false;
 let summonedWords: SummonedWords[] = [];
 let userInput = "";
 let timeoutID: ReturnType<typeof setTimeout> | undefined = undefined;
+const healthBar: HTMLElement = document.getElementById("bar")!;
+const accuracyDisplay: HTMLElement = document.getElementById("accuracy-display")!;
+let playerHealth = 100;
+let wordsSummoned = 0;
+let wordsMissed = 0;
 
 const fakeData = [
     "abreact",
@@ -92,6 +97,7 @@ function summonWord(word: string): HTMLDivElement | undefined {
     
         summonedWords.push({ divElement, word });
         mainPageEl.appendChild(divElement);
+        wordsSummoned += 1;
     
         return divElement;
     }
@@ -133,6 +139,9 @@ function move(divElement: HTMLDivElement | undefined) {
     divElement.style.top = divElementY + 20 + "px";
     divElementY = divElement.getBoundingClientRect().top;
 
+    const playerAccuracy = ((wordsSummoned - wordsMissed) / wordsSummoned * 100).toFixed(2);
+    accuracyDisplay.innerHTML = `${playerAccuracy}%`;
+
     if (divElementY < baseY) {
         setTimeout(() => {
             if (!paused) {
@@ -142,7 +151,29 @@ function move(divElement: HTMLDivElement | undefined) {
     } else {
         summonedWords.shift();
         divElement.remove();
+        wordsMissed += 1;
+        playerHealth -= 10;
+        const { height } = healthBar.getBoundingClientRect();
+        healthBar.style.height = (height - 50) + "px";
+
+        if (playerHealth <= 0) {
+            end();
+        }
     }
+}
+
+function end() {
+    inPlay = false;
+    paused = true;
+
+    for (let i = 0; i < summonedWords.length; i++) {
+        summonedWords[i].divElement.remove();
+    }
+    summonedWords= [];
+
+    userInput = "";
+    timeoutID = undefined;
+    startButton.innerHTML = "play";
 }
 
 function start(words: string[]) {
