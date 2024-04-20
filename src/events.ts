@@ -6,28 +6,15 @@ const startButton: HTMLElement = document.getElementById("start-button")!;
 function commands(input: string) {
     switch(input) {
         case "-play": {
-            if (!inPlay) {
-                inPlay = true;
-                paused = false;
-                setup();
-                startButton.innerHTML = "stop";
-                healthBar.style.height = 500 + "px";
-            }
+            if (!inPlay) start();
             break;
         }
         case "-stop": {
-            if (inPlay) {
-                end();
-            }
+            if (inPlay) end();
             break;
         }
         case "-pause": {
-            if (!paused) {
-                caretDisplay.classList.remove("blinking");
-                clearTimeout(timeoutID);
-                paused = true;
-                summonPauseScreen();
-            }
+            if (!paused) pause();
             break;
         }
     }
@@ -42,6 +29,7 @@ function checkEnteredWord() {
         if (word === userInput) {
             summonedWords.splice(i, 1);
             divElement.remove();
+            
             const { height } = healthBar.getBoundingClientRect();
             if (playerHealth < 100 && height < 500) {
                 playerHealth += 5;
@@ -53,28 +41,43 @@ function checkEnteredWord() {
     }
 
     userInput = "";
+    // textDisplay.innerHTML = "";
 }
 
 window.addEventListener("blur", () => {
-    if (!paused) {
-        caretDisplay.classList.remove("blinking");
-        clearTimeout(timeoutID);
-        paused = true;
-        summonPauseScreen();
-    }
+    if (!paused) pause();
 });
 
 startButton.addEventListener("click", () => {
-    if (!inPlay) {
-        inPlay = true;
-        paused = false;
-        setup();
-        startButton.innerHTML = "stop";
-        healthBar.style.height = 500 + "px";
-    } else {
+    if (inPlay) {
         end();
-    }
+        return;
+    } 
+    
+    start();
 });
+
+function typeUserInput(input: string) {
+    userInput += input;
+
+    const textNode = document.createTextNode(input);
+    const spanElement = document.createElement("span");
+    spanElement.classList.add("letter");
+    spanElement.appendChild(textNode);
+
+    textDisplay.appendChild(spanElement);
+    caretDisplay.style.right = (-5) + "px";
+    if (input === " ") {
+        caretDisplay.style.right = (-14) + "px";
+    }
+}
+
+function deleteTextInput() {
+    userInput = userInput.slice(0, -1);
+    
+    const letterElements = textDisplay.querySelectorAll(".letter");
+    letterElements[letterElements.length - 1].remove();
+}
 
 document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (inPlay && paused) return;
@@ -89,7 +92,6 @@ document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (input.length <= 1 && alphanumericRegex.test(input)) {
         userInput += input;
         caretDisplay.classList.remove("blinking");
-        // typeUserInput(input);
     }
 
     if (userInput === "" && !paused) {

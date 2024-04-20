@@ -14,53 +14,34 @@ let playerHealth = 100;
 let wordsSummoned = 0;
 let wordsMissed = 0;
 
-const fakeData = [
-    "abreact",
-    "abreacted",
-    "abreacting",
-    "abreaction",
-    "abreactions",
-    "abreacts",
-    "abreast",
-    "abri",
-    "abridge",
-    "abridged",
-    "abridgement",
-    "abridgements",
-    "abridger",
-    "abridgers",
-    "abridges",
-    "abridging",
-    "abridgment",
-    "abridgments",
-    "abris",
-    "abroach",
-    "abroad",
-    "abrogable",
-    "abrogate",
-    "abrogated",
-    "abrogates",
-    "abrogating",
-    "abrogation",
-    "abrogations",
-    "abrogator",
-    "abrogators",
-    "abrosia",
-    "abrosias",
-    "abrupt",
-    "abrupter",
-    "abruptest",
-    "abruption",
-    "abruptions",
-    "abruptly",
-    "abruptness",
-    "abruptnesses",
-    "abs",
-];
-
 async function getWords(): Promise<any> {
-    const response = await fetch("https://random-word-api.herokuapp.com/all");
-    return response.json();
+    let data: any = JSON.parse(localStorage.getItem("words")!);
+    if (!data) {
+        const response = await fetch("https://random-word-api.herokuapp.com/all");
+        data = await response.json();
+        localStorage.setItem("words", JSON.stringify(data));
+    }
+    return data;
+}
+
+async function shuffle(words: string[]): Promise<string[]> {
+    const response: string[] = await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let currentIndex = words.length;
+
+            while (currentIndex !== 0) {
+                const randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                
+                [words[currentIndex], words[randomIndex]] = [
+                    words[randomIndex], words[currentIndex]];
+            }
+
+            resolve(words.map((word) => word));
+        }, 500);
+    });
+
+    return response;
 }
 
 function textInput() {
@@ -162,6 +143,13 @@ function move(divElement: HTMLDivElement | undefined) {
     }
 }
 
+function pause() {
+    caretDisplay.classList.remove("blinking");
+    clearTimeout(timeoutID);
+    paused = true;
+    summonPauseScreen();
+}
+
 function end() {
     inPlay = false;
     paused = true;
@@ -176,7 +164,15 @@ function end() {
     startButton.innerHTML = "play";
 }
 
-function start(words: string[]) {
+function start() {
+    inPlay = true;
+    paused = false;
+    setup();
+    startButton.innerHTML = "stop";
+    healthBar.style.height = 500 + "px";
+}
+
+function summon(words: string[]) {
     if (!paused) {
         if (words.length <= 0) {
             setup();
@@ -186,25 +182,13 @@ function start(words: string[]) {
         setTimeout(() => {
             const divElement = summonWord(words.shift()!);
             move(divElement);
-            setTimeout(() => start(words), 500);
+            setTimeout(() => summon(words), 500);
         }, 500);
     }
 }
 
-async function getFakeData(): Promise<string[]> {
-    const response: string[] = await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(fakeData.map((data) => data));
-        }, 500);
-    });
-
-    return response;
-}
-
 async function setup() {
-    // const words: string[] = await getWords();
-    // console.log(words);
-    // start(words);
-    const words: string[] = await getFakeData();
-    start(words);
+    const words: string[] = await getWords();
+    const randomWords = await shuffle(words);
+    summon(randomWords);
 }
