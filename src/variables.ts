@@ -8,7 +8,7 @@ let inPlay = false;
 let summonedWords: SummonedWords[] = [];
 let userInput = "";
 let timeoutID: ReturnType<typeof setTimeout> | undefined = undefined;
-const healthBar: HTMLElement = document.getElementById("bar")!;
+const healthBar: HTMLElement = document.getElementById("health-bar")!;
 const accuracyDisplay: HTMLElement = document.getElementById("accuracy-display")!;
 let playerHealth = 100;
 let wordsSummoned = 0;
@@ -58,7 +58,7 @@ function textInput() {
 
 function summonWord(word: string): HTMLDivElement | undefined {
     if (!paused) {
-        const mainPageEl = document.getElementsByTagName("main")[0];
+        const playfieldEl = document.getElementById("playfield")!;
         const divElement = document.createElement("div");
         const text = document.createTextNode(word);
         divElement.appendChild(text);
@@ -74,10 +74,9 @@ function summonWord(word: string): HTMLDivElement | undefined {
         const randomLeft = Math.floor(Math.random() * 967);
         
         divElement.style.left = randomLeft + "px";
-        divElement.style.top = "20px";
     
         summonedWords.push({ divElement, word });
-        mainPageEl.appendChild(divElement);
+        playfieldEl.appendChild(divElement);
         wordsSummoned += 1;
     
         return divElement;
@@ -85,15 +84,12 @@ function summonWord(word: string): HTMLDivElement | undefined {
 }
 
 function summonPauseScreen() {
-    const mainPageEl = document.getElementsByTagName("main")[0];
+    const playfieldEl = document.getElementById("playfield")!;
     const divElement = document.createElement("div");
-    const headerEl = document.createElement("h1");
-    headerEl.textContent = "Game Paused.";
-    divElement.appendChild(headerEl);
+    divElement.innerHTML = "<div><h1>Game Paused</h1> Click here to continue</div>";
+    divElement.id = "pause-screen";
 
-    const buttonEl = document.createElement("button");
-    buttonEl.textContent = "Click here to continue";
-    buttonEl.addEventListener("click", () => {
+    divElement.addEventListener("click", () => {
         divElement.remove();
         paused = false;
 
@@ -105,19 +101,17 @@ function summonPauseScreen() {
             setup();
         }, 1000);
     });
-    buttonEl.classList.add("play-button");
-
-    divElement.appendChild(buttonEl);
-    mainPageEl.appendChild(divElement);
+    
+    playfieldEl.appendChild(divElement);
 }
 
 function move(divElement: HTMLDivElement | undefined) {
     if (!divElement) return;
-    const baseElement = document.getElementsByClassName("base")[0];
+    const baseElement = document.getElementById("judgement-base")!;
     const baseY = baseElement.getBoundingClientRect().top;
     let divElementY = divElement.getBoundingClientRect().top;
 
-    divElement.style.top = divElementY + 20 + "px";
+    divElement.style.top = divElementY + 13 + "px";
     divElementY = divElement.getBoundingClientRect().top;
 
     const playerAccuracy = ((wordsSummoned - wordsMissed) / wordsSummoned * 100).toFixed(2);
@@ -128,7 +122,7 @@ function move(divElement: HTMLDivElement | undefined) {
             if (!paused) {
                 move(divElement);
             };
-        }, 60);
+        }, 100);
     } else {
         summonedWords.shift();
         divElement.remove();
@@ -182,7 +176,7 @@ function summon(words: string[]) {
         setTimeout(() => {
             const divElement = summonWord(words.shift()!);
             move(divElement);
-            setTimeout(() => summon(words), 500);
+            setTimeout(() => summon(words), 1200);
         }, 500);
     }
 }

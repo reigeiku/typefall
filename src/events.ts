@@ -98,7 +98,11 @@ document.addEventListener("keydown", (e: KeyboardEvent) => {
         caretDisplay.classList.add("blinking");
     }
 
+    if (userInput === "" && !inPlay) {
+        caretDisplay.classList.add("blinking");
+    }
+    
     textDisplay.innerHTML = userInput;
-    caretDisplay.style.right = (-5) + "px";
+    caretDisplay.style.right = (-6) + "px";
     textInput();
 });
