@@ -145,6 +145,7 @@ function pause() {
 }
 
 function end() {
+    const pauseScreen = document.getElementById("pause-screen");
     inPlay = false;
     paused = true;
 
@@ -153,9 +154,13 @@ function end() {
     }
     summonedWords= [];
 
-    userInput = "";
+    textDisplay.textContent = userInput = "";
     timeoutID = undefined;
     startButton.innerHTML = "play";
+    if (pauseScreen) {
+        pauseScreen.remove();
+    }
+    caretDisplay.classList.add("blinking");
 }
 
 function start() {

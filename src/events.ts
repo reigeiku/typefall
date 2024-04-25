@@ -79,7 +79,7 @@ document.addEventListener("keydown", (e: KeyboardEvent) => {
         caretDisplay.classList.add("blinking");
     }
 
-    textDisplay.innerHTML = userInput;
+    textDisplay.textContent = userInput;
     caretDisplay.style.right = (-6) + "px";
     textInput();
 });
