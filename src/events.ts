@@ -41,7 +41,6 @@ function checkEnteredWord() {
     }
 
     userInput = "";
-    // textDisplay.innerHTML = "";
 }
 
 window.addEventListener("blur", () => {
@@ -56,28 +55,6 @@ startButton.addEventListener("click", () => {
     
     start();
 });
-
-function typeUserInput(input: string) {
-    userInput += input;
-
-    const textNode = document.createTextNode(input);
-    const spanElement = document.createElement("span");
-    spanElement.classList.add("letter");
-    spanElement.appendChild(textNode);
-
-    textDisplay.appendChild(spanElement);
-    caretDisplay.style.right = (-5) + "px";
-    if (input === " ") {
-        caretDisplay.style.right = (-14) + "px";
-    }
-}
-
-function deleteTextInput() {
-    userInput = userInput.slice(0, -1);
-    
-    const letterElements = textDisplay.querySelectorAll(".letter");
-    letterElements[letterElements.length - 1].remove();
-}
 
 document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (inPlay && paused) return;
@@ -101,7 +78,7 @@ document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (userInput === "" && !inPlay) {
         caretDisplay.classList.add("blinking");
     }
-    
+
     textDisplay.innerHTML = userInput;
     caretDisplay.style.right = (-6) + "px";
     textInput();
