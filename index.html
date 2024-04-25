@@ -10,22 +10,33 @@
 <body>
     <header>
         <h1 id="title">typefall</h1>
+        <nav>
+            <div id="start-button" class="event-button">play</div>
+        </nav>
     </header>
     <main>
-        <nav class="player-nav">
-            <div id="start-button" class="play-button">play</div>
-        </nav>
-        <div class="playfield">
-            <div>Accuracy: <span id="accuracy-display">0.00%</span></div>
+        <ul id="player-stats">
+            <li class="stats">
+                Words typed: <span>0</span>
+            </li>
+            <li class="stats">
+                Accuracy: <span id="accuracy-display">0.00%</span>
+            </li>
+        </ul>
+        <ul id="commands">
+            Commands
+            <li class="command">"-play"</li>
+            <li class="command">"-stop"</li>
+            <li class="command">"-pause"</li>
+        </ul>
+        <div id="playfield">
             <div id="player-health">
-                <div id="bar"></div>
+                <div id="health-bar"></div>
             </div>
-            <div class="base-container">
-                <div class="base"></div>
-                <div id="text-display">
-                    <span id="caret" class="blinking">|</span>
-                    <div id="text"></div>
-                </div>
+            <div id="judgement-base"></div>
+            <div id="text-display">
+                <span id="caret" class="blinking">|</span>
+                <div id="text"></div>
             </div>
         </div>
     </main>

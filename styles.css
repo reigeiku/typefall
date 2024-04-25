@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+    --background-color: #FAFAFA;
+    --primary-color: #484B6A;
+    --secondary-color: #9394A5;
+    --input-color: #484B6A;
+    --faded-color: #E4E5F1;
+    --health-color: #484B6A;
+    --health-background-color: #E4E5F1;
+    --pause-screen-background-color: rgba(147, 148, 165, 0.9);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
+    background-color: var(--background-color);
     font-family: "Roboto Condensed", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
@@ -12,139 +29,140 @@ body {
 }
 
 header {
-    /* border: 1px solid red; */
-    background-color: white;
-    box-shadow: 0 10px 100px #fff;
-    z-index: 98;
-}
-
-header > h1 {
-    width: fit-content;
-    margin: 0 auto;
-    padding-top: 1rem;
-}
-
-main {
-    width: 100vh;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translate(-50%);
-    height: 100%;
-    width: 100%;
-    border: 1px solid lime;
-}
-
-.base-container {
-    width: fit-content;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.player-nav {
-    background-color: #ececec;
-    border-radius: 10px;
-    height: 40px;
-    width: 20vw;
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
-    justify-content: left;
-    align-items: center;
-}
-
-.pause-screen {
-    z-index: 99;
-    background: #888;
-    opacity: 0.5;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-}
-
-.pause-screen button {
-    opacity: 1;
-}
-
-.base {
-    width: 100vh;
-    border: 1px solid black;
+    font-size: 2rem;
+    margin-top: 10px;
+    margin-left: 30px;
 }
 
 .word {
-    color: #acacac;
+    color: var(--faded-color);
+    font-weight: bold;
     position: absolute;
-    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    z-index: -2;
 }
 
 .typed-word {
-    color: black;
+    color: var(--input-color);
     position: absolute;
     left: 0;
 }
 
-.play-button {
-    font-family: "Roboto Condensed", sans-serif;
-    font-size: 1rem;
-    font-weight: bold;
-    height: fit-content;
+#title {
+    color: var(--primary-color);
+}
+
+.event-button {
+    color: var(--secondary-color);
+}
+
+.event-button:hover {
+    color: var(--primary-color);
     cursor: pointer;
 }
 
-input {
-    position: relative;
-    bottom: 2px;
-    left: 50%;
-    transform: translate(-50%);
-    color: #000;
-    border-radius: 20px;
-    border-top: 5px solid #000;
-    background-color: transparent;
-    height: 18px;
-    width: 357px;
-    padding: 10px;
-	outline: inherit;
+#player-stats {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+    list-style: none;
+}
 
-    &:focus {
-        outline: none;
-    }
+.stats {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+#playfield {
+    background-color: var(--secondary-color);
+    height: 100vh;
+    /* width: 53.42vw; */
+    width: 62.5rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+#player-health {
+    background-color: var(--health-background-color);
+    position: absolute;
+    bottom: 0;
+    right: -25px;
+    height: 500px;
+    width: 25px;
+}
+
+#health-bar {
+    background-color: var(--health-color);
+    position: absolute;
+    bottom: 0;
+    width: inherit;
+    transition: height 1s ease-in-out;
+}
+
+#judgement-base {
+    background-color: var(--input-color);
+    position: absolute;
+    bottom: 101px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 5px;
+    width: 50rem;
+    z-index: -1;
 }
 
 #text-display {
+    color: var(--input-color);
     position: absolute;
-    bottom: 20%;
+    bottom: 35px;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 100px;
+    font-size: 32px;
+    font-weight: bold;
+    height: 30px;
     width: fit-content;
-    font-size: 2rem;
+    z-index: -1;
 }
 
 #caret {
     position: absolute;
 }
 
-#player-health {
-    height: 500px;
-    width: 20px;
-    background-color: #acacac;
-    position: absolute;
-    left: 80%;
-    top: 45%;
-}
-
-#bar {
-    height: 0;
-    width: 20px;
-    background-color: #000;
-    z-index: 8;
+#commands {
+    color: var(--secondary-color);
+    font-size: 1.5rem;
     position: absolute;
     bottom: 0;
-    transition: height 1s ease-in-out;
+    margin-bottom: 10px;
+    margin-left: 30px;
+    list-style: none;
+}
+
+#pause-screen {
+    /* rgba(72, 75, 106, 0.9); */
+    background: var(--pause-screen-background-color);
+    color: var(--background-color);
+    width: 50%;
+    z-index: 999;
+    font-size: 2.5rem;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+#pause-screen > div {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .blinking {
@@ -160,6 +178,6 @@ input {
         color: transparent;
     }
     50% {
-        color: black;
+        color: var(--input-color);
     }
 }
