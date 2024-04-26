@@ -9,9 +9,11 @@ let summonedWords: SummonedWords[] = [];
 let userInput = "";
 let timeoutID: ReturnType<typeof setTimeout> | undefined = undefined;
 const healthBar: HTMLElement = document.getElementById("health-bar")!;
+const wordsTypedDisplay: HTMLElement = document.getElementById("words-typed-display")!;
 const accuracyDisplay: HTMLElement = document.getElementById("accuracy-display")!;
 let playerHealth = 100;
 let wordsSummoned = 0;
+let wordsTyped = 0;
 let wordsMissed = 0;
 
 async function getWords(): Promise<any> {
@@ -48,12 +50,22 @@ function textInput() {
     for (let i = 0; i < summonedWords.length; i++) {
         const { divElement, word } = summonedWords[i];
 
-        if (word.includes(userInput)) {
+        if (word.includes(userInput) && word[0] === userInput[0]) {
             divElement.querySelectorAll(".typed-word")[0].textContent = userInput;
         } else {
             divElement.querySelectorAll(".typed-word")[0].textContent = "";
         }
     }
+}
+
+function setAccuracyDislpay() {
+    let playerAccuracy: number = ((wordsSummoned - wordsMissed) / wordsSummoned * 100);
+
+    if (wordsTyped === 0) {
+        playerAccuracy = 0;
+    }
+    
+    accuracyDisplay.innerHTML = `${playerAccuracy.toFixed(2)}%`;
 }
 
 function summonWord(word: string): HTMLDivElement | undefined {
@@ -65,18 +77,24 @@ function summonWord(word: string): HTMLDivElement | undefined {
         divElement.classList.add("word");
     
         const spanElement = document.createElement("span");
-        if (word.includes(userInput)) {
+        if (word.includes(userInput) && word[0] === userInput[0]) {
             spanElement.textContent = userInput;
         }
         spanElement.classList.add("typed-word");
         divElement.appendChild(spanElement);
-    
-        const randomLeft = Math.floor(Math.random() * 967);
+
+        divElement.style.top = "-25px";
+        playfieldEl.appendChild(divElement);
+        
+        const playfieldWidth = playfieldEl.getBoundingClientRect().width;
+        const widthToDeduct = divElement.getBoundingClientRect().width;
+
+        const randomX = Math.floor(Math.random() * playfieldWidth);
+        const randomLeft = randomX < widthToDeduct ? randomX : randomX - widthToDeduct;
         
         divElement.style.left = randomLeft + "px";
     
         summonedWords.push({ divElement, word });
-        playfieldEl.appendChild(divElement);
         wordsSummoned += 1;
     
         return divElement;
@@ -114,10 +132,7 @@ function move(divElement: HTMLDivElement | undefined) {
     divElement.style.top = divElementY + 13 + "px";
     divElementY = divElement.getBoundingClientRect().top;
 
-    const playerAccuracy = ((wordsSummoned - wordsMissed) / wordsSummoned * 100).toFixed(2);
-    accuracyDisplay.innerHTML = `${playerAccuracy}%`;
-
-    if (divElementY < baseY) {
+    if (divElementY < baseY - 30) {
         setTimeout(() => {
             if (!paused) {
                 move(divElement);
@@ -130,6 +145,7 @@ function move(divElement: HTMLDivElement | undefined) {
         playerHealth -= 10;
         const { height } = healthBar.getBoundingClientRect();
         healthBar.style.height = (height - 50) + "px";
+        setAccuracyDislpay();
 
         if (playerHealth <= 0) {
             end();
@@ -156,6 +172,9 @@ function end() {
 
     textDisplay.textContent = userInput = "";
     timeoutID = undefined;
+    wordsSummoned = 0;
+    wordsTyped = 0;
+    wordsMissed = 0;
     startButton.innerHTML = "play";
     if (pauseScreen) {
         pauseScreen.remove();
@@ -168,6 +187,7 @@ function start() {
     paused = false;
     setup();
     startButton.innerHTML = "stop";
+    playerHealth = 100;
     healthBar.style.height = 500 + "px";
 }
 

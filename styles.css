@@ -41,6 +41,7 @@ header {
     position: absolute;
     font-size: 1.5rem;
     z-index: -2;
+    transition: top 0.1s ease-in-out;
 }
 
 .typed-word {
@@ -174,6 +175,42 @@ header {
 }
 
 @keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: var(--input-color);
+    }
+}
+
+@-moz-keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: var(--input-color);
+    }
+}
+  
+@-webkit-keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: var(--input-color);
+    }
+}
+
+@-ms-keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: var(--input-color);
+    }
+}
+
+@-o-keyframes blink {
     from, to {
         color: transparent;
     }

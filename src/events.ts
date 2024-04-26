@@ -29,6 +29,9 @@ function checkEnteredWord() {
         if (word === userInput) {
             summonedWords.splice(i, 1);
             divElement.remove();
+            wordsTyped += 1;
+            wordsTypedDisplay.textContent = wordsTyped.toString();
+            setAccuracyDislpay();
             
             const { height } = healthBar.getBoundingClientRect();
             if (playerHealth < 100 && height < 500) {
